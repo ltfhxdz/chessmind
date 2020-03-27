@@ -1,0 +1,55 @@
+# 计算出每个逻辑点（X，Y,宽，长）
+sortChessesList = [{'name': 'heijiang', 'x': 102, 'y': 18, 'width': 25, 'height': 24, 'score': 0.977899968624115},
+                   {'name': 'heipao', 'x': 203, 'y': 19, 'width': 23, 'height': 24, 'score': 0.9840927124023438},
+                   {'name': 'kong', 'x': 15, 'y': 32, 'width': 25, 'height': 25, 'score': 0.9995076656341553},
+                   {'name': 'kong', 'x': 42, 'y': 32, 'width': 23, 'height': 24, 'score': 0.9990548491477966},
+                   {'name': 'hongbing', 'x': 152, 'y': 44, 'width': 24, 'height': 24, 'score': 0.9889885783195496},
+                   {'name': 'hongche', 'x': 78, 'y': 45, 'width': 22, 'height': 22, 'score': 0.9664438366889954},
+                   {'name': 'heishi', 'x': 102, 'y': 45, 'width': 25, 'height': 23, 'score': 0.9879944324493408},
+                   {'name': 'kong', 'x': 41, 'y': 58, 'width': 24, 'height': 24, 'score': 0.9995957016944885},
+                   {'name': 'kong', 'x': 191, 'y': 58, 'width': 24, 'height': 23, 'score': 0.9999504089355469},
+                   {'name': 'kong', 'x': 16, 'y': 59, 'width': 24, 'height': 23, 'score': 0.9996104836463928},
+                   {'name': 'heishi', 'x': 77, 'y': 70, 'width': 24, 'height': 24, 'score': 0.9626434445381165},
+                   {'name': 'heixiang', 'x': 104, 'y': 70, 'width': 22, 'height': 23, 'score': 0.9863094091415405},
+                   {'name': 'hongma', 'x': 153, 'y': 70, 'width': 23, 'height': 24, 'score': 0.9567722678184509},
+                   {'name': 'kong', 'x': 16, 'y': 83, 'width': 24, 'height': 23, 'score': 0.9998884201049805},
+                   {'name': 'kong', 'x': 42, 'y': 83, 'width': 23, 'height': 23, 'score': 0.9909104704856873},
+                   {'name': 'kong', 'x': 191, 'y': 83, 'width': 24, 'height': 23, 'score': 0.99996018409729},
+                   {'name': 'kong', 'x': 166, 'y': 107, 'width': 24, 'height': 24, 'score': 0.9999850988388062},
+                   {'name': 'kong', 'x': 16, 'y': 108, 'width': 25, 'height': 23, 'score': 0.9999054670333862},
+                   {'name': 'kong', 'x': 91, 'y': 108, 'width': 24, 'height': 23, 'score': 0.9998965263366699},
+                   {'name': 'kong', 'x': 116, 'y': 108, 'width': 24, 'height': 23, 'score': 0.9999663829803467},
+                   {'name': 'kong', 'x': 141, 'y': 108, 'width': 24, 'height': 23, 'score': 0.9999781847000122},
+                   {'name': 'kong', 'x': 191, 'y': 108, 'width': 24, 'height': 23, 'score': 0.9999701976776123},
+                   {'name': 'heixiang', 'x': 52, 'y': 119, 'width': 25, 'height': 24, 'score': 0.9677591323852539},
+                   {'name': 'kong', 'x': 17, 'y': 158, 'width': 23, 'height': 23, 'score': 0.9999600648880005},
+                   {'name': 'kong', 'x': 42, 'y': 158, 'width': 23, 'height': 24, 'score': 0.9998644590377808},
+                   {'name': 'kong', 'x': 66, 'y': 158, 'width': 23, 'height': 24, 'score': 0.999855637550354},
+                   {'name': 'kong', 'x': 91, 'y': 158, 'width': 23, 'height': 24, 'score': 0.9998840093612671},
+                   {'name': 'kong', 'x': 116, 'y': 158, 'width': 24, 'height': 24, 'score': 0.9999643564224243},
+                   {'name': 'kong', 'x': 141, 'y': 158, 'width': 24, 'height': 24, 'score': 0.9999806880950928},
+                   {'name': 'kong', 'x': 167, 'y': 158, 'width': 23, 'height': 24, 'score': 0.9999896287918091},
+                   {'name': 'kong', 'x': 191, 'y': 158, 'width': 24, 'height': 23, 'score': 0.9998890161514282},
+                   {'name': 'kong', 'x': 16, 'y': 183, 'width': 24, 'height': 23, 'score': 0.9996427297592163},
+                   {'name': 'kong', 'x': 166, 'y': 183, 'width': 24, 'height': 24, 'score': 0.9997625946998596},
+                   {'name': 'kong', 'x': 41, 'y': 184, 'width': 24, 'height': 23, 'score': 0.9995077848434448},
+                   {'name': 'kong', 'x': 192, 'y': 184, 'width': 23, 'height': 22, 'score': 0.9999014139175415},
+                   {'name': 'hongche', 'x': 128, 'y': 194, 'width': 23, 'height': 25, 'score': 0.9854603409767151},
+                   {'name': 'hongshuai', 'x': 78, 'y': 195, 'width': 23, 'height': 23, 'score': 0.9726802110671997},
+                   {'name': 'hongpao', 'x': 103, 'y': 195, 'width': 23, 'height': 22, 'score': 0.89987713098526},
+                   {'name': 'kong', 'x': 191, 'y': 208, 'width': 24, 'height': 24, 'score': 0.9999833106994629},
+                   {'name': 'heima', 'x': 27, 'y': 219, 'width': 23, 'height': 24, 'score': 0.9887425899505615},
+                   {'name': 'heiche', 'x': 53, 'y': 219, 'width': 24, 'height': 24, 'score': 0.984645664691925},
+                   {'name': 'heiche', 'x': 152, 'y': 219, 'width': 24, 'height': 24, 'score': 0.9921749234199524},
+                   {'name': 'heizu', 'x': 102, 'y': 220, 'width': 25, 'height': 23, 'score': 0.9961448907852173},
+                   {'name': 'kong', 'x': 191, 'y': 233, 'width': 24, 'height': 23, 'score': 0.9999768733978271},
+                   {'name': 'hongpao', 'x': 127, 'y': 245, 'width': 25, 'height': 23, 'score': 0.9752383232116699}]
+
+minX = {'name': 'kong', 'x': 15, 'y': 32, 'width': 25, 'height': 25, 'score': 0.9995076656341553}
+maxX = {'name': 'heipao', 'x': 203, 'y': 19, 'width': 23, 'height': 24, 'score': 0.9840927124023438}
+minY = {'name': 'heijiang', 'x': 102, 'y': 18, 'width': 25, 'height': 24, 'score': 0.977899968624115}
+maxY = {'name': 'hongpao', 'x': 127, 'y': 245, 'width': 25, 'height': 23, 'score': 0.9752383232116699}
+
+LogicPoint = [{'name': 'D11', 'x1': 15, 'y1': 15, 'x2': 20, 'y2': 20},
+              {'name': 'D12', 'x1': 15, 'y1': 15, 'x2': 20, 'y2': 20}]
+

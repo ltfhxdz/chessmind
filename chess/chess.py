@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+import time
 import json
 import numpy as np
 import cv2 as cv
@@ -7,23 +8,26 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 def drawRect(img, left, top, fillColor):
-    """打印任何传入的字符串"""
-    ptLeftTop = (left, top)  # left,top
-    ptRightBottom = (left + 25, top + 25)  # left+width,top+height
+    """画方框"""
+    pt1 = (left, top)  # left,top
+    pt2 = (left + 25, top + 25)  # left+width,top+height
     thickness = 1
     lineType = 4
-    cv.rectangle(img, ptLeftTop, ptRightBottom, fillColor, thickness, lineType)
+    cv.rectangle(img, pt1, pt2, fillColor, thickness, lineType)
     return
 
 
 def drawFillRect(img, left, top, fillColor):
-    """打印任何传入的字符串"""
-    ptLeftTop = (left, top)  # left,top
-    ptRightBottom = (left + 25, top + 25)  # left+width,top+height
+    """画方"""
+    # pt1 矩形的一个顶点
+    # pt2 矩形对角线上的另一个顶点
+    pt1 = (left, top)  # left,top
+    pt2 = (left + 25, top + 25)  # left+width,top+height
+    # -1 表示填充，1 表示画框
     thickness = -1
     lineType = 4
-    cv.rectangle(img, ptLeftTop, ptRightBottom, fillColor, thickness, lineType)
-    cv.rectangle(img, ptLeftTop, ptRightBottom, (0, 0, 0), 1, lineType)
+    cv.rectangle(img, pt1, pt2, fillColor, thickness, lineType)
+    cv.rectangle(img, pt1, pt2, (255, 0, 0), 1, lineType)
     return
 
 
@@ -62,7 +66,9 @@ def drawKongChess(img, word, left, top):
 
 def drawEmptyRect():
     width = 600
-    img = np.zeros((width, width, 3), np.uint8)  # 生成一个空灰度图像
+    # 生成一个空灰度图像
+    img = np.zeros((width, width, 3), np.uint8)
+    # 白色背景
     img[:, :, 0] = np.zeros([width, width]) + 255
     img[:, :, 1] = np.ones([width, width]) + 254
     img[:, :, 2] = np.ones([width, width]) * 255
@@ -98,6 +104,24 @@ def drawCell(image):
     return image
 
 
+def chonghe(box1, box2):
+    """box2落在了box1里"""
+    x01, y01, box1w, box1h = box1
+    x11, y11, box2w, box2h = box2
+
+    x02 = x01 + box1w
+    y02 = y01 + box1h
+    x12 = x11 + box2w
+    y12 = y11 + box2h
+
+    if (x01 <= x11) and (y01 <= y12) and (x02 >= x12) and (y02 >= y12):
+        print('True')
+        return True
+    else:
+        print('False')
+        return False
+
+
 def getChessList(imageName):
     f = open('D:/xyz/workspace/chessmind/chess/data/json/' + imageName + '.json', encoding='utf-8')
     info = f.read()
@@ -107,6 +131,38 @@ def getChessList(imageName):
     return chessList
 
 
+def getSortChessList(imageName):
+    chesses = getChessList(fileName)
+    newChessList = []
+    for x in chesses:
+        newOne = x
+        newLocation = {'name': newOne['name'],
+                       'x': newOne['location']['left'],
+                       'y': newOne['location']['top'],
+                       'width': newOne['location']['width'],
+                       'height': newOne['location']['height'],
+                       'score': newOne['score']}
+        newChessList.append(newLocation)
+
+    sortChessList = sorted(newChessList, key=lambda w: (w['y'], w['x']), reverse=False)
+    return sortChessList
+
+
+def max_min():
+    # x最小值：左上角
+    minX = min(sortChessesList, key=lambda w: (w['x']))
+    print('minX=' + str(minX))
+    # x最大值：右上角
+    maxX = max(sortChessesList, key=lambda w: (w['x']))
+    print('maxX=' + str(maxX))
+    # y最小值：左上角
+    minY = min(sortChessesList, key=lambda w: (w['y']))
+    print('minY=' + str(minY))
+    # y最大值，右下角
+    maxY = max(sortChessesList, key=lambda w: (w['y']))
+    print('maxY=' + str(maxY))
+
+
 fileName = 'chess2'
 toFile = 'D:/xyz/workspace/chessmind/chess/data/images/baidu/' + fileName + 'b.jpg'
 
@@ -114,35 +170,30 @@ chessMapping = {'hongshuai': '帅', 'hongshi': '士', 'hongxiang': '相', 'hongm
                 'hongpao': '炮', 'hongbing': '兵', 'heijiang': '将', 'heishi': '士', 'heixiang': '象',
                 'heima': '马', 'heiche': '车', 'heipao': '炮', 'heizu': '卒', 'kong': '空'}
 
-chesses = getChessList(fileName)
-print(chesses)
-# print(len(chesses))
-# firstChess = chesses[0]
-# firstLocation = firstChess['location']
-# firstWidth = firstLocation['width']
-# firstHeight = firstLocation['height']
-# avg = round((firstWidth + firstHeight) / 2)
-#
+sortChessesList = getSortChessList(fileName)
+print(sortChessesList)
+
+# x最小值：左上角
+minX = min(sortChessesList, key=lambda w: (w['x']))
+print('minX=' + str(minX))
 
 img = drawEmptyRect()
 img = drawCell(img)
 
 m = 0
-for x in chesses:
-    m = m + 1
-    one = x
+for n in sortChessesList:
+    one = n
     print(one)
-    location = one['location']
+
+    m = m + 1
+    if m % 5 == 0:
+        print('--------------------------------------')
+
     name = one['name']
     score = one['score']
-    left = location['left']
-    top = location['top']
+    left = one['x']
+    top = one['y']
 
-    if left >= 16:
-        continue
-
-    print('xyz:')
-    print(one)
     chess = ''
     if name != 'kong':
         chess = chessMapping[name]
@@ -156,11 +207,10 @@ for x in chesses:
     else:
         print('name=' + name)
 
-    # if m == 10:
+    # if m == 18:
     #     break
 
 cv.imwrite(toFile, img)
-
 cv.namedWindow("chess", cv.WINDOW_NORMAL)
 cv.imshow('chess', img)
 cv.waitKey()  # 显示 10000 ms 即 10s 后消失
