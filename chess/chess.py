@@ -163,6 +163,30 @@ def max_min():
     print('maxY=' + str(maxY))
 
 
+def drawLogicPoint(sortChessesList):
+    """画逻辑点"""
+    minX = min(sortChessesList, key=lambda w: (w['x']))
+
+    D11x = minX['x']
+    D11y = minX['y']
+    width = minX['width']
+    height = minX['height']
+    A = int(D11x - width / 4)
+    B = int(D11y - height / 4)
+    W = int(width / 2)
+    H = int(height / 2)
+
+    for a in range(0, 10):
+        B1 = B + height * a
+        for b in range(0, 9):
+            A1 = A + width * b
+            pt1 = (A1, B1)
+            pt2 = (A1 + W, B1 + H)
+            fillColor = (0, 0, 0)
+            cv.rectangle(img, pt1, pt2, fillColor, -1, 4)
+    return img
+
+
 fileName = 'chess2'
 toFile = 'D:/xyz/workspace/chessmind/chess/data/images/baidu/' + fileName + 'b.jpg'
 
@@ -172,13 +196,11 @@ chessMapping = {'hongshuai': '帅', 'hongshi': '士', 'hongxiang': '相', 'hongm
 
 sortChessesList = getSortChessList(fileName)
 print(sortChessesList)
-
-# x最小值：左上角
-minX = min(sortChessesList, key=lambda w: (w['x']))
-print('minX=' + str(minX))
+max_min()
 
 img = drawEmptyRect()
 img = drawCell(img)
+img = drawLogicPoint(sortChessesList)
 
 m = 0
 for n in sortChessesList:
