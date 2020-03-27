@@ -176,15 +176,23 @@ def drawLogicPoint(sortChessesList):
     W = int(width / 2)
     H = int(height / 2)
 
+    logicPointList = []
     for a in range(0, 10):
         B1 = B + height * a
         for b in range(0, 9):
             A1 = A + width * b
             pt1 = (A1, B1)
             pt2 = (A1 + W, B1 + H)
+            logicPointName = 'D' + str(a+1) + str(b+1)
+            logicPointDict = {}
+            logicPointDict.update({'name': logicPointName, 'x': A1, 'y': B1, 'width': W, 'height': H})
+            logicPointList.append(logicPointDict)
+            print(logicPointDict)
             fillColor = (0, 0, 0)
             cv.rectangle(img, pt1, pt2, fillColor, -1, 4)
-    return img
+
+    print(logicPointList)
+    return logicPointList
 
 
 fileName = 'chess2'
@@ -199,8 +207,10 @@ print(sortChessesList)
 max_min()
 
 img = drawEmptyRect()
-img = drawCell(img)
-img = drawLogicPoint(sortChessesList)
+drawCell(img)
+logicPointList = drawLogicPoint(sortChessesList)
+
+# 如果逻辑点被包围，就显示棋子
 
 m = 0
 for n in sortChessesList:
