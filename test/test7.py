@@ -185,6 +185,9 @@ box6 = (100, 300, 100, 100)
 print('chonghe(box1, box6)')
 chonghe(box1, box6)
 
+# {'name': 'heijiang', 'x': 102, 'y': 18, 'width': 25, 'height': 24, 'score': 0.977899968624115}
+# {'x': 8, 'y': 25, 'width': 12, 'height': 12}
+
 cv.namedWindow("chess", cv.WINDOW_NORMAL)
 cv.imshow('chess', img)
 cv.waitKey()  # 显示 10000 ms 即 10s 后消失

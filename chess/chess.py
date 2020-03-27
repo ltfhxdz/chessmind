@@ -106,8 +106,14 @@ def drawCell(image):
 
 def chonghe(box1, box2):
     """box2落在了box1里"""
-    x01, y01, box1w, box1h = box1
-    x11, y11, box2w, box2h = box2
+    x01 = box1['x']
+    y01 = box1['y']
+    box1w = box1['width']
+    box1h = box1['height']
+    x11 = box2['x']
+    y11 = box2['y']
+    box2w = box2['width']
+    box2h = box2['height']
 
     x02 = x01 + box1w
     y02 = y01 + box1h
@@ -115,10 +121,8 @@ def chonghe(box1, box2):
     y12 = y11 + box2h
 
     if (x01 <= x11) and (y01 <= y12) and (x02 >= x12) and (y02 >= y12):
-        print('True')
         return True
     else:
-        print('False')
         return False
 
 
@@ -187,11 +191,8 @@ def drawLogicPoint(sortChessesList):
             logicPointDict = {}
             logicPointDict.update({'name': logicPointName, 'x': A1, 'y': B1, 'width': W, 'height': H})
             logicPointList.append(logicPointDict)
-            print(logicPointDict)
             fillColor = (0, 0, 0)
             cv.rectangle(img, pt1, pt2, fillColor, -1, 4)
-
-    print(logicPointList)
     return logicPointList
 
 
@@ -211,36 +212,36 @@ drawCell(img)
 logicPointList = drawLogicPoint(sortChessesList)
 
 # 如果逻辑点被包围，就显示棋子
+for i in logicPointList:
+    logicPointBox = {}
+    logicPointBox.update({'x': i['x'], 'y': i['y'], 'width': i['width'], 'height': i['height']})
 
-m = 0
-for n in sortChessesList:
-    one = n
-    print(one)
+    for n in sortChessesList:
+        one = n
+        name = one['name']
+        score = one['score']
+        left = one['x']
+        top = one['y']
+        width = one['width']
+        height = one['height']
+        sortChessBox = {}
+        sortChessBox.update({'x': left, 'y': top, 'width': width, 'height': height})
 
-    m = m + 1
-    if m % 5 == 0:
-        print('--------------------------------------')
+        if not chonghe(sortChessBox, logicPointBox):
+            continue
 
-    name = one['name']
-    score = one['score']
-    left = one['x']
-    top = one['y']
+        chess = ''
+        if name != 'kong':
+            chess = chessMapping[name]
 
-    chess = ''
-    if name != 'kong':
-        chess = chessMapping[name]
-
-    if 'hong' in name:
-        img = drawRedChess(img, chess, left, top)
-    elif 'hei' in name:
-        img = drawBlackChess(img, chess, left, top)
-    elif 'kong' in name:
-        img = drawKongChess(img, chess, left, top)
-    else:
-        print('name=' + name)
-
-    # if m == 18:
-    #     break
+        if 'hong' in name:
+            img = drawRedChess(img, chess, left, top)
+        elif 'hei' in name:
+            img = drawBlackChess(img, chess, left, top)
+        elif 'kong' in name:
+            img = drawKongChess(img, chess, left, top)
+        else:
+            print('name=' + name)
 
 cv.imwrite(toFile, img)
 cv.namedWindow("chess", cv.WINDOW_NORMAL)
