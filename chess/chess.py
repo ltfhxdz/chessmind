@@ -75,32 +75,33 @@ def drawEmptyRect():
     return img
 
 
-def drawCell(image):
+def drawCell(image, minX):
     blue = (255, 0, 0)
-    bx = 15
-    by = 32
+    bx = minX['x']
+    by = minX['y']
+    width = minX['width']
     ex = 215
     ey = 257
     cv.line(image, (bx, by), (ex, by), blue)
-    cv.line(image, (bx, by + 25), (ex, by + 25), blue)
-    cv.line(image, (bx, by + 25 * 2), (ex, by + 25 * 2), blue)
-    cv.line(image, (bx, by + 25 * 3), (ex, by + 25 * 3), blue)
-    cv.line(image, (bx, by + 25 * 4), (ex, by + 25 * 4), blue)
-    cv.line(image, (bx, by + 25 * 5), (ex, by + 25 * 5), blue)
-    cv.line(image, (bx, by + 25 * 6), (ex, by + 25 * 6), blue)
-    cv.line(image, (bx, by + 25 * 7), (ex, by + 25 * 7), blue)
-    cv.line(image, (bx, by + 25 * 8), (ex, by + 25 * 8), blue)
-    cv.line(image, (bx, by + 25 * 9), (ex, by + 25 * 9), blue)
+    cv.line(image, (bx, by + width), (ex, by + width), blue)
+    cv.line(image, (bx, by + width * 2), (ex, by + width * 2), blue)
+    cv.line(image, (bx, by + width * 3), (ex, by + width * 3), blue)
+    cv.line(image, (bx, by + width * 4), (ex, by + width * 4), blue)
+    cv.line(image, (bx, by + width * 5), (ex, by + width * 5), blue)
+    cv.line(image, (bx, by + width * 6), (ex, by + width * 6), blue)
+    cv.line(image, (bx, by + width * 7), (ex, by + width * 7), blue)
+    cv.line(image, (bx, by + width * 8), (ex, by + width * 8), blue)
+    cv.line(image, (bx, by + width * 9), (ex, by + width * 9), blue)
 
     cv.line(image, (bx, by), (bx, ey), blue)
-    cv.line(image, (bx + 25, by), (bx + 25, ey), blue)
-    cv.line(image, (bx + 25 * 2, by), (bx + 25 * 2, ey), blue)
-    cv.line(image, (bx + 25 * 3, by), (bx + 25 * 3, ey), blue)
-    cv.line(image, (bx + 25 * 4, by), (bx + 25 * 4, ey), blue)
-    cv.line(image, (bx + 25 * 5, by), (bx + 25 * 5, ey), blue)
-    cv.line(image, (bx + 25 * 6, by), (bx + 25 * 6, ey), blue)
-    cv.line(image, (bx + 25 * 7, by), (bx + 25 * 7, ey), blue)
-    cv.line(image, (bx + 25 * 8, by), (bx + 25 * 8, ey), blue)
+    cv.line(image, (bx + width, by), (bx + width, ey), blue)
+    cv.line(image, (bx + width * 2, by), (bx + width * 2, ey), blue)
+    cv.line(image, (bx + width * 3, by), (bx + width * 3, ey), blue)
+    cv.line(image, (bx + width * 4, by), (bx + width * 4, ey), blue)
+    cv.line(image, (bx + width * 5, by), (bx + width * 5, ey), blue)
+    cv.line(image, (bx + width * 6, by), (bx + width * 6, ey), blue)
+    cv.line(image, (bx + width * 7, by), (bx + width * 7, ey), blue)
+    cv.line(image, (bx + width * 8, by), (bx + width * 8, ey), blue)
     return image
 
 
@@ -187,13 +188,47 @@ def drawLogicPoint(sortChessesList):
             A1 = A + width * b
             pt1 = (A1, B1)
             pt2 = (A1 + W, B1 + H)
-            logicPointName = 'D' + str(a+1) + str(b+1)
+            logicPointName = 'D' + str(a + 1) + str(b + 1)
             logicPointDict = {}
             logicPointDict.update({'name': logicPointName, 'x': A1, 'y': B1, 'width': W, 'height': H})
             logicPointList.append(logicPointDict)
             fillColor = (0, 0, 0)
             cv.rectangle(img, pt1, pt2, fillColor, -1, 4)
     return logicPointList
+
+
+def showChess(img, logicPointList, sortChessesList):
+    # 如果逻辑点被包围，就显示棋子
+    for i in logicPointList:
+        logicPointBox = {}
+        logicPointBox.update({'x': i['x'], 'y': i['y'], 'width': i['width'], 'height': i['height']})
+
+        for n in sortChessesList:
+            one = n
+            name = one['name']
+            score = one['score']
+            left = one['x']
+            top = one['y']
+            width = one['width']
+            height = one['height']
+            sortChessBox = {}
+            sortChessBox.update({'x': left, 'y': top, 'width': width, 'height': height})
+
+            if chonghe(sortChessBox, logicPointBox):
+                chess = ''
+                if name != 'kong':
+                    chess = chessMapping[name]
+
+                if 'hong' in name:
+                    img = drawRedChess(img, chess, left, top)
+                elif 'hei' in name:
+                    img = drawBlackChess(img, chess, left, top)
+                elif 'kong' in name:
+                    img = drawKongChess(img, chess, left, top)
+                else:
+                    print('name=' + name)
+                break
+    return img
 
 
 fileName = 'chess2'
@@ -207,41 +242,13 @@ sortChessesList = getSortChessList(fileName)
 print(sortChessesList)
 max_min()
 
+minX = min(sortChessesList, key=lambda w: (w['x']))
+print('minX=' + str(minX))
 img = drawEmptyRect()
-drawCell(img)
+drawCell(img, minX)
 logicPointList = drawLogicPoint(sortChessesList)
-
-# 如果逻辑点被包围，就显示棋子
-for i in logicPointList:
-    logicPointBox = {}
-    logicPointBox.update({'x': i['x'], 'y': i['y'], 'width': i['width'], 'height': i['height']})
-
-    for n in sortChessesList:
-        one = n
-        name = one['name']
-        score = one['score']
-        left = one['x']
-        top = one['y']
-        width = one['width']
-        height = one['height']
-        sortChessBox = {}
-        sortChessBox.update({'x': left, 'y': top, 'width': width, 'height': height})
-
-        if not chonghe(sortChessBox, logicPointBox):
-            continue
-
-        chess = ''
-        if name != 'kong':
-            chess = chessMapping[name]
-
-        if 'hong' in name:
-            img = drawRedChess(img, chess, left, top)
-        elif 'hei' in name:
-            img = drawBlackChess(img, chess, left, top)
-        elif 'kong' in name:
-            img = drawKongChess(img, chess, left, top)
-        else:
-            print('name=' + name)
+# 显示棋子
+img = showChess(img, logicPointList, sortChessesList)
 
 cv.imwrite(toFile, img)
 cv.namedWindow("chess", cv.WINDOW_NORMAL)
