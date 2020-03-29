@@ -88,8 +88,8 @@ class chess:
         return img
 
     @staticmethod
-    def drawEmptyRect():
-        width = 600
+    def drawEmptyRect(width):
+        # width = 800
         # 生成一个空灰度图像
         img = np.zeros((width, width, 3), np.uint8)
         # 白色背景
@@ -99,34 +99,107 @@ class chess:
         return img
 
     @staticmethod
-    def drawCell(image, minX):
-        blue = (255, 0, 0)
-        bx = minX['x']
-        by = minX['y']
-        width = minX['width']
-        ex = bx + width * 8
-        ey = by + width * 9
-        cv.line(image, (bx, by), (ex, by), blue)
-        cv.line(image, (bx, by + width), (ex, by + width), blue)
-        cv.line(image, (bx, by + width * 2), (ex, by + width * 2), blue)
-        cv.line(image, (bx, by + width * 3), (ex, by + width * 3), blue)
-        cv.line(image, (bx, by + width * 4), (ex, by + width * 4), blue)
-        cv.line(image, (bx, by + width * 5), (ex, by + width * 5), blue)
-        cv.line(image, (bx, by + width * 6), (ex, by + width * 6), blue)
-        cv.line(image, (bx, by + width * 7), (ex, by + width * 7), blue)
-        cv.line(image, (bx, by + width * 8), (ex, by + width * 8), blue)
-        cv.line(image, (bx, by + width * 9), (ex, by + width * 9), blue)
+    def drawCell(image, sortChessesList):
+        # 最小值
+        # minX = min(sortChessesList, key=lambda w: (w['x']))
 
-        cv.line(image, (bx, by), (bx, ey), blue)
-        cv.line(image, (bx + width, by), (bx + width, ey), blue)
-        cv.line(image, (bx + width * 2, by), (bx + width * 2, ey), blue)
-        cv.line(image, (bx + width * 3, by), (bx + width * 3, ey), blue)
-        cv.line(image, (bx + width * 4, by), (bx + width * 4, ey), blue)
-        cv.line(image, (bx + width * 5, by), (bx + width * 5, ey), blue)
-        cv.line(image, (bx + width * 6, by), (bx + width * 6, ey), blue)
-        cv.line(image, (bx + width * 7, by), (bx + width * 7, ey), blue)
-        cv.line(image, (bx + width * 8, by), (bx + width * 8, ey), blue)
+        qipan = max(sortChessesList, key=lambda w: (w['width']))
+        print('qipan=' + str(qipan))
+
+        blue = (255, 0, 0)
+        # 第一行的起点bx,by
+        bx = qipan['x']
+        by = qipan['y']
+        qipanW = qipan['width']
+        qipanH = qipan['height']
+        # 棋格的宽度
+        width = int((qipanW - bx) / 8)
+        # 棋格的高度
+        height = int((qipanH - by) / 9)
+        print(width)
+        print(height)
+        # 棋盘的终点ex,ey
+        ex = width * 8 + bx
+        ey = width * 9 + by
+        # 第一行:起点bx,by 终点ex,ey
+        cv.line(image, (bx, by + width * 0), (ex, by + width * 0), blue, 2)
+        cv.line(image, (bx, by + width * 1), (ex, by + width * 1), blue, 2)
+        cv.line(image, (bx, by + width * 2), (ex, by + width * 2), blue, 2)
+        cv.line(image, (bx, by + width * 3), (ex, by + width * 3), blue, 2)
+        cv.line(image, (bx, by + width * 4), (ex, by + width * 4), blue, 2)
+        cv.line(image, (bx, by + width * 5), (ex, by + width * 5), blue, 2)
+        cv.line(image, (bx, by + width * 6), (ex, by + width * 6), blue, 2)
+        cv.line(image, (bx, by + width * 7), (ex, by + width * 7), blue, 2)
+        cv.line(image, (bx, by + width * 8), (ex, by + width * 8), blue, 2)
+        cv.line(image, (bx, by + width * 9), (ex, by + width * 9), blue, 2)
+
+        # 第一列：起点bx, by 终点bx, ey
+        cv.line(image, (bx + width * 0, by), (bx + width * 0, ey), blue, 2)
+        cv.line(image, (bx + width * 1, by), (bx + width * 1, ey), blue, 2)
+        cv.line(image, (bx + width * 2, by), (bx + width * 2, ey), blue, 2)
+        cv.line(image, (bx + width * 3, by), (bx + width * 3, ey), blue, 2)
+        cv.line(image, (bx + width * 4, by), (bx + width * 4, ey), blue, 2)
+        cv.line(image, (bx + width * 5, by), (bx + width * 5, ey), blue, 2)
+        cv.line(image, (bx + width * 6, by), (bx + width * 6, ey), blue, 2)
+        cv.line(image, (bx + width * 7, by), (bx + width * 7, ey), blue, 2)
+        cv.line(image, (bx + width * 8, by), (bx + width * 8, ey), blue, 2)
         return image
+
+    @staticmethod
+    def drawChessboard(sortChessesList):
+        # 画棋盘
+        qipan = max(sortChessesList, key=lambda w: (w['width']))
+        qipanX = qipan['x']
+        qipanY = qipan['y']
+        qipanW = qipan['width']
+        qipanH = qipan['height']
+        # 生成一个空灰度图像
+        imageW = qipanW + 300
+        imageH = qipanH + 300
+        img = np.zeros((imageW, imageH, 3), np.uint8)
+        # 白色背景
+        img[:, :, 0] = np.zeros([imageW, imageH]) + 255
+        img[:, :, 1] = np.ones([imageW, imageH]) + 254
+        img[:, :, 2] = np.ones([imageW, imageH]) * 255
+        # pt1 矩形的一个顶点
+        pt1 = (qipanX, qipanY)
+        # pt2 矩形对角线上的另一个顶点  X+宽 Y+高
+        endx = qipanX + qipanW
+        endy = qipanY + qipanH
+        # print('endx=' + str(endx))
+        # print('endy=' + str(endy))
+        pt2 = (endx, endy)
+        # -1 表示填充，1 表示画框, >=2表示线的粗细
+        thickness = -1
+        lineType = 4
+        cv.rectangle(img, pt1, pt2, (255, 0, 0), 2, lineType)
+        width = round(qipanW / 8)
+        height = round(qipanH / 9)
+        # print(width)
+        # print(height)
+        # 画横线    X是横坐标 Y是纵坐标
+        cv.line(img, (qipanX, qipanY + height * 1), (endx, qipanX + height * 1), (255, 0, 0), 2)
+        cv.line(img, (qipanX, qipanY + height * 2), (endx, qipanX + height * 2), (255, 0, 0), 2)
+        cv.line(img, (qipanX, qipanY + height * 3), (endx, qipanX + height * 3), (255, 0, 0), 2)
+        cv.line(img, (qipanX, qipanY + height * 4), (endx, qipanX + height * 4), (255, 0, 0), 2)
+        cv.line(img, (qipanX, qipanY + height * 5), (endx, qipanX + height * 5), (255, 0, 0), 2)
+        cv.line(img, (qipanX, qipanY + height * 6), (endx, qipanX + height * 6), (255, 0, 0), 2)
+        cv.line(img, (qipanX, qipanY + height * 7), (endx, qipanX + height * 7), (255, 0, 0), 2)
+        cv.line(img, (qipanX, qipanY + height * 8), (endx, qipanX + height * 8), (255, 0, 0), 2)
+        # 最后一行，可能存在误差
+        # cv.line(img, (qipanX, qipanY + height * 9), (endx, qipanX + height * 9), (255, 0, 0), 2)
+        # 画竖线    X是横坐标 Y是纵坐标
+        cv.line(img, (qipanX + width * 1, qipanY), (qipanX + width * 1, endy), (255, 0, 0), 2)
+        cv.line(img, (qipanX + width * 2, qipanY), (qipanX + width * 2, endy), (255, 0, 0), 2)
+        cv.line(img, (qipanX + width * 3, qipanY), (qipanX + width * 3, endy), (255, 0, 0), 2)
+        cv.line(img, (qipanX + width * 4, qipanY), (qipanX + width * 4, endy), (255, 0, 0), 2)
+        cv.line(img, (qipanX + width * 5, qipanY), (qipanX + width * 5, endy), (255, 0, 0), 2)
+        cv.line(img, (qipanX + width * 6, qipanY), (qipanX + width * 6, endy), (255, 0, 0), 2)
+        cv.line(img, (qipanX + width * 7, qipanY), (qipanX + width * 7, endy), (255, 0, 0), 2)
+        # 最后一列，可能存在误差 误差是 endx- (qipanX + width * 8)=6
+        # cv.line(img, (qipanX + width * 8, qipanY), (qipanX + width * 8, endy), (255, 0, 0), 2)
+        # print(qipanX + width * 8)
+        return img
 
     @staticmethod
     def getChessList(imageName):
@@ -168,6 +241,9 @@ class chess:
         # y最大值，右下角
         maxY = max(sortChessesList, key=lambda w: (w['y']))
         print('maxY=' + str(maxY))
+        # qipan
+        qipan = max(sortChessesList, key=lambda w: (w['width']))
+        print('qipan=' + str(qipan))
 
     @staticmethod
     def drawLogicPoint(sortChessesList, img):
@@ -207,6 +283,7 @@ class chess:
 
             for n in sortChessesList:
                 one = n
+                # print(one)
                 name = one['name']
                 score = one['score']
                 left = one['x']
@@ -215,6 +292,10 @@ class chess:
                 height = one['height']
                 sortChessBox = {}
                 sortChessBox.update({'x': left, 'y': top, 'width': width, 'height': height})
+
+                # if 'qipan' == name:
+                #     print('qipan ='+name)
+                #     continue
 
                 if chess.chonghe(sortChessBox, logicPointBox):
                     single = ''
@@ -232,7 +313,83 @@ class chess:
                     break
         return img
 
+    @staticmethod
+    def drawChess(img, sortChessesList):
+        # minX={'name': 'kong', 'x': 23, 'y': 858, 'width': 109, 'height': 100, 'score': 0.9999998807907104}
+        # pt1 矩形的一个顶点
+        # pt1 = (23, 858)
+        # # pt2 矩形对角线上的另一个顶点  X+宽 Y+高
+        # pt2 = (23 + 109, 858 + 100)
+        # # -1 表示填充，1 表示画框, >=2表示线的粗细
+        # cv.rectangle(img, pt1, pt2, (255, 0, 0), 2, 4)
+        for n in sortChessesList:
+            one = n
+            print(one)
+            name = one['name']
+            score = one['score']
+            left = one['x']
+            top = one['y']
+            width = one['width']
+            height = one['height']
+            sortChessBox = {}
+            sortChessBox.update({'x': left, 'y': top, 'width': width, 'height': height})
+
+            single = ''
+            if name != 'kong':
+                single = chessMapping[name]
+
+            if 'hong' in name:
+                img = chess.drawRedChess(img, single, left, top)
+            elif 'hei' in name:
+                img = chess.drawBlackChess(img, single, left, top)
+            elif 'kong' in name:
+                img = chess.drawKongChess(img, single, left, top)
+            else:
+                print('name=' + name)
+
+        return img
+
+    @staticmethod
+    def drawChess2(img, sortChessesList):
+        # 画棋子
+        for n in sortChessesList:
+            one = n
+            print(one)
+            name = one['name']
+            score = one['score']
+            x = one['x']
+            y = one['y']
+            width = one['width']
+            height = one['height']
+
+            single = ''
+            if name != 'kong':
+                single = chessMapping[name]
+
+            if 'hong' in name:
+                fillColor = (0, 0, 255)
+                pt1 = (x, y)
+                pt2 = (x + width, y + width)
+                cv.rectangle(img, pt1, pt2, fillColor, 2, 4)
+                img = chess.write(img, x, y, single, fillColor)
+            elif 'hei' in name:
+                fillColor = (0, 0, 0)
+                pt1 = (x, y)  # left,top
+                pt2 = (x + width, y + width)
+                cv.rectangle(img, pt1, pt2, fillColor, 2, 4)
+                img = chess.write(img, x, y, single, fillColor)
+            elif 'kong' in name:
+                fillColor = (0, 255, 0)
+                pt1 = (x, y)  # left,top
+                pt2 = (x + width, y + width)
+                cv.rectangle(img, pt1, pt2, fillColor, -1, 4)
+                cv.rectangle(img, pt1, pt2, (255, 0, 0), 2, 4)
+            else:
+                print('name=' + name)
+        return img
+
 
 chessMapping = {'hongshuai': '帅', 'hongshi': '士', 'hongxiang': '相', 'hongma': '马', 'hongche': '车',
                 'hongpao': '炮', 'hongbing': '兵', 'heijiang': '将', 'heishi': '士', 'heixiang': '象',
-                'heima': '马', 'heiche': '车', 'heipao': '炮', 'heizu': '卒', 'kong': '空'}
+                'heima': '马', 'heiche': '车', 'heipao': '炮', 'heizu': '卒', 'kong': '空',
+                'qipan': 'qipan', 'chuhe': 'chuhe'}

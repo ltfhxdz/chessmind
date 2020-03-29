@@ -1,0 +1,32 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+import json
+import numpy as np
+import cv2 as cv
+from PIL import Image, ImageDraw, ImageFont
+from util.ChessTool2 import chess2 as chess
+
+fileName = 'chess1'
+toFile = 'D:/xyz/workspace/chessmind/chess/data/images/baidu/' + fileName + 'b.jpg'
+# 得到排序的列表
+sortChessesList = chess.getSortChessList(fileName)
+print(json.dumps(sortChessesList))
+print(len(sortChessesList))
+
+# 宽的平均值
+averageDict = chess.widthAndHeightAverage(sortChessesList)
+
+# 显示最大值、最小值
+chess.max_min(sortChessesList)
+
+# 初始化画布
+width = 600
+img = chess.drawEmptyRect(width)
+# 画棋盘
+img = chess.drawChess(img, sortChessesList)
+
+cv.imwrite(toFile, img)
+cv.namedWindow("chess", cv.WINDOW_NORMAL)
+cv.imshow('chess', img)
+cv.waitKey()  # 显示 10000 ms 即 10s 后消失
+cv.destroyAllWindows()

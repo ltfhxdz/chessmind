@@ -144,7 +144,7 @@ def chonghe(box1, box2):
     print('--------------------------')
 
 
-width = 600
+width = 2800
 # 生成一个空灰度图像
 img = np.zeros((width, width, 3), np.uint8)
 # 背景为白色
@@ -152,18 +152,24 @@ img[:, :, 0] = np.zeros([width, width]) + 255
 img[:, :, 1] = np.ones([width, width]) + 254
 img[:, :, 2] = np.ones([width, width]) * 255
 
-#                     {'x': 102, 'y': 18, 'width': 25, 'height': 24}
-# {'name': 'heijiang', 'x': 102, 'y': 18, 'width': 25, 'height': 24, 'score': 0.977899968624115}
-fillColor = (0, 255, 0)
-box1 = (102, 18, 25, 24)
-img = drawFillRect(img, box1, fillColor)
+# minX={'name': 'kong', 'x': 23, 'y': 858, 'width': 109, 'height': 100, 'score': 0.9999998807907104}
+# fillColor = (0, 255, 0)
+# box1 = (53, 858, 100, 100)
+# img = drawFillRect(img, box1, fillColor)
 
-# {'x': 8, 'y': 25, 'width': 12, 'height': 12}
-fillColor = (255, 0, 0)
-box2 = (8, 25, 12, 12)
-img = drawFillRect(img, box2, fillColor)
-print('chonghe(box1, box2)')
-chonghe(box1, box2)
+blue = (255, 0, 0)
+bx = 53
+by = 53
+ex = 891
+
+cv.line(img, (bx, by), (ex, by), blue, 2)
+
+# # {'x': 8, 'y': 25, 'width': 12, 'height': 12}
+# fillColor = (255, 0, 0)
+# box2 = (8, 25, 12, 12)
+# img = drawFillRect(img, box2, fillColor)
+# print('chonghe(box1, box2)')
+# chonghe(box1, box2)
 
 cv.namedWindow("chess", cv.WINDOW_NORMAL)
 cv.imshow('chess', img)
