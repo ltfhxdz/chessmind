@@ -13,16 +13,16 @@ sortChessesList = chess.getSortChessList(fileName)
 print(json.dumps(sortChessesList))
 print(len(sortChessesList))
 
-# 宽的平均值
-averageDict = chess.widthAndHeightAverage(sortChessesList)
-
 # 显示最大值、最小值
 chess.max_min(sortChessesList)
 
 # 初始化画布
-width = 600
-img = chess.drawEmptyRect(width)
+img = chess.drawEmptyRect(sortChessesList)
+
 # 画棋盘
+img = chess.drawChessboard(img, sortChessesList)
+
+# 画棋子
 img = chess.drawChess(img, sortChessesList)
 
 cv.imwrite(toFile, img)

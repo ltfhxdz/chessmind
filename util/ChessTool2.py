@@ -18,14 +18,18 @@ class chess2:
         return chessList
 
     @staticmethod
-    def drawEmptyRect(width):
-        # width = 800
+    def drawEmptyRect(sortChessesList):
+        qipan = max(sortChessesList, key=lambda w: (w['width']))
+        qipanW = qipan['width']
+        qipanH = qipan['height']
         # 生成一个空灰度图像
-        img = np.zeros((width, width, 3), np.uint8)
+        imageW = qipanW + 300
+        imageH = qipanH + 300
+        img = np.zeros((imageW, imageH, 3), np.uint8)
         # 白色背景
-        img[:, :, 0] = np.zeros([width, width]) + 255
-        img[:, :, 1] = np.ones([width, width]) + 254
-        img[:, :, 2] = np.ones([width, width]) * 255
+        img[:, :, 0] = np.zeros([imageW, imageH]) + 255
+        img[:, :, 1] = np.ones([imageW, imageH]) + 254
+        img[:, :, 2] = np.ones([imageW, imageH]) * 255
         return img
 
     @staticmethod
@@ -100,13 +104,13 @@ class chess2:
                 fillColor = (0, 0, 255)
                 pt1 = (x, y)
                 pt2 = (x + width, y + width)
-                cv.rectangle(img, pt1, pt2, fillColor, 2, 4)
+                cv.rectangle(img, pt1, pt2, fillColor, 1, 4)
                 img = chess2.write(img, x, y, single, fillColor)
             elif 'hei' in name:
                 fillColor = (0, 0, 0)
                 pt1 = (x, y)  # left,top
                 pt2 = (x + width, y + width)
-                cv.rectangle(img, pt1, pt2, fillColor, 2, 4)
+                cv.rectangle(img, pt1, pt2, fillColor, 1, 4)
                 img = chess2.write(img, x, y, single, fillColor)
             elif 'kong' in name:
                 fillColor = (0, 255, 0)
@@ -136,8 +140,60 @@ class chess2:
         heightAverage = heightAverage / (len(sortChessesList) - 1)
         print('widthAverage = '+str(round(widthAverage)))
         print('heightAverage = '+str(round(heightAverage)))
-        averageDict = {'widthAverage': widthAverage, 'heightAverage': heightAverage}
+        averageDict = {'widthAverage': round(widthAverage), 'heightAverage': round(heightAverage)}
         return averageDict
+
+    @staticmethod
+    def drawChessboard(img, sortChessesList):
+        # 画棋盘
+
+        # 宽的平均值
+        averageDict = chess2.widthAndHeightAverage(sortChessesList)
+        width = averageDict['widthAverage']
+        height = averageDict['heightAverage']
+
+        # 起始点使用棋盘的，宽度使用平均值，宽度使用棋盘，最后画的有些小，百度返回的有些小
+        qipan = max(sortChessesList, key=lambda w: (w['width']))
+        qipanX = qipan['x']
+        qipanY = qipan['y']
+        qipanW = width * 8
+        qipanH = height * 9
+
+        # pt1 矩形的一个顶点
+        pt1 = (qipanX, qipanY)
+        # pt2 矩形对角线上的另一个顶点  X+宽 Y+高
+        endx = qipanX + qipanW
+        endy = qipanY + qipanH
+        # print('endx=' + str(endx))
+        # print('endy=' + str(endy))
+        pt2 = (endx, endy)
+        # -1 表示填充，>=1 表示画框线的粗细
+        thickness = 1
+        cv.rectangle(img, pt1, pt2, (255, 0, 0), thickness, 4)
+
+        # 画横线    X是横坐标 Y是纵坐标
+        cv.line(img, (qipanX, qipanY + height * 1), (endx, qipanY + height * 1), (255, 0, 0), thickness)
+        cv.line(img, (qipanX, qipanY + height * 2), (endx, qipanY + height * 2), (255, 0, 0), thickness)
+        cv.line(img, (qipanX, qipanY + height * 3), (endx, qipanY + height * 3), (255, 0, 0), thickness)
+        cv.line(img, (qipanX, qipanY + height * 4), (endx, qipanY + height * 4), (255, 0, 0), thickness)
+        cv.line(img, (qipanX, qipanY + height * 5), (endx, qipanY + height * 5), (255, 0, 0), thickness)
+        cv.line(img, (qipanX, qipanY + height * 6), (endx, qipanY + height * 6), (255, 0, 0), thickness)
+        cv.line(img, (qipanX, qipanY + height * 7), (endx, qipanY + height * 7), (255, 0, 0), thickness)
+        cv.line(img, (qipanX, qipanY + height * 8), (endx, qipanY + height * 8), (255, 0, 0), thickness)
+        # 最后一行，可能存在误差
+        # cv.line(img, (qipanX, qipanY + height * 9), (endx, qipanX + height * 9), (255, 0, 0), 2)
+        # 画竖线    X是横坐标 Y是纵坐标
+        cv.line(img, (qipanX + width * 1, qipanY), (qipanX + width * 1, endy), (255, 0, 0), thickness)
+        cv.line(img, (qipanX + width * 2, qipanY), (qipanX + width * 2, endy), (255, 0, 0), thickness)
+        cv.line(img, (qipanX + width * 3, qipanY), (qipanX + width * 3, endy), (255, 0, 0), thickness)
+        cv.line(img, (qipanX + width * 4, qipanY), (qipanX + width * 4, endy), (255, 0, 0), thickness)
+        cv.line(img, (qipanX + width * 5, qipanY), (qipanX + width * 5, endy), (255, 0, 0), thickness)
+        cv.line(img, (qipanX + width * 6, qipanY), (qipanX + width * 6, endy), (255, 0, 0), thickness)
+        cv.line(img, (qipanX + width * 7, qipanY), (qipanX + width * 7, endy), (255, 0, 0), thickness)
+        # 最后一列，可能存在误差 误差是 endx- (qipanX + width * 8)=6
+        # cv.line(img, (qipanX + width * 8, qipanY), (qipanX + width * 8, endy), (255, 0, 0), 2)
+        # print(qipanX + width * 8)
+        return img
 
 
 chessMapping = {'hongshuai': '帅', 'hongshi': '士', 'hongxiang': '相', 'hongma': '马', 'hongche': '车',
