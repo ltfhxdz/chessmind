@@ -2,11 +2,11 @@ import cv2 as cv
 import numpy as np
 
 
-def intersect(box1, box2):
+def intersect(box1, bofinal):
     # 判断两个矩形是否相交
     # box=(xA,yA,xB,yB)
     x01, y01, x02, y02 = box1
-    x11, y11, x12, y12 = box2
+    x11, y11, x12, y12 = bofinal
 
     lx = abs((x01 + x02) / 2 - (x11 + x12) / 2)
     ly = abs((y01 + y02) / 2 - (y11 + y12) / 2)
@@ -20,14 +20,14 @@ def intersect(box1, box2):
         return False
 
 
-def chonghe6(box1, box2):
+def chonghe6(box1, bofinal):
     # box=(xA,yA,xB,yB)
     # 计算两个矩形框的重合度
     print(box1)
-    print(box2)
-    if intersect(box1, box2):
+    print(bofinal)
+    if intersect(box1, bofinal):
         x01, y01, x02, y02 = box1
-        x11, y11, x12, y12 = box2
+        x11, y11, x12, y12 = bofinal
         col = min(x02, x12) - max(x01, x11)
         print('col=' + str(col))
         row = min(y02, y12) - max(y01, y11)
@@ -45,9 +45,9 @@ def chonghe6(box1, box2):
         return False
 
 
-def chonghe2(box1, box2):
+def chonghe2(box1, bofinal):
     x01, y01, x02, y02 = box1
-    x11, y11, x12, y12 = box2
+    x11, y11, x12, y12 = bofinal
 
     if x01 > x11 + x12:
         return 0.0
@@ -86,36 +86,36 @@ def drawFillRect(image, left, top, w, h, color):
     return image
 
 
-def chonghe3(box1, box2):
+def chonghe3(box1, bofinal):
     print('box1:')
     print(box1)
-    print('box2:')
-    print(box2)
+    print('bofinal:')
+    print(bofinal)
     x01, y01, x02, y02 = box1
-    x11, y11, x12, y12 = box2
+    x11, y11, x12, y12 = bofinal
     return
 
 
-def mianji(box1, box2):
+def mianji(box1, bofinal):
     print('canshu1:')
     print(box1)
     print('canshu2:')
-    print(box2)
+    print(bofinal)
 
     # 方1
-    x1, y1, x2, y2 = box1
-    x1, x2 = min(x1, x2), max(x1, x2)
+    x1, y1, final, y2 = box1
+    x1, final = min(x1, final), max(x1, final)
     y1, y2 = min(y1, y2), max(y1, y2)
 
     # 方2
-    x3, y3, x4, y4 = box2
+    x3, y3, x4, y4 = bofinal
     x3, x4 = min(x3, x4), max(x3, x4)
     y3, y4 = min(y3, y4), max(y3, y4)
 
-    if (x2 <= x3 or x4 <= x1) and (y2 <= y3 or y4 <= y1):
+    if (final <= x3 or x4 <= x1) and (y2 <= y3 or y4 <= y1):
         print(0)
     else:
-        lens = min(x2, x4) - max(x1, x3)
+        lens = min(final, x4) - max(x1, x3)
         wide = min(y2, y4) - max(y1, y3)
         print(lens)
         print(wide)
@@ -124,15 +124,15 @@ def mianji(box1, box2):
     print('--------------------------')
 
 
-def chonghe(box1, box2):
-    """box2落在了box1里"""
+def chonghe(box1, bofinal):
+    """bofinal落在了box1里"""
     x01, y01, box1w, box1h = box1
-    x11, y11, box2w, box2h = box2
+    x11, y11, bofinalw, bofinalh = bofinal
 
     x02 = x01 + box1w
     y02 = y01 + box1h
-    x12 = x11 + box2w
-    y12 = y11 + box2h
+    x12 = x11 + bofinalw
+    y12 = y11 + bofinalh
 
     if (x01 <= x11) and (y01 <= y12) and (x02 >= x12) and (y02 >= y12):
         print('True')
@@ -157,9 +157,9 @@ box1 = (100, 18, 300, 300)
 
 fillColor = (255, 0, 0)
 img = drawFillRect(img, 200, 60, 100, 100, fillColor)
-box2 = (200, 60, 100, 100)
-print('chonghe(box1, box2)')
-chonghe(box1, box2)
+bofinal = (200, 60, 100, 100)
+print('chonghe(box1, bofinal)')
+chonghe(box1, bofinal)
 
 fillColor = (0, 0, 255)
 img = drawFillRect(img, 20, 30, 50, 50, fillColor)

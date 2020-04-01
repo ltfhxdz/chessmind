@@ -23,7 +23,7 @@ ptLeftTop = (left, top)  # left,top
 ptRightBottom = (left+width, top+height)  # left+width,top+height
 thickness = 1
 lineType = 4
-blue = (255, 0, 0)
+blue = color
 cv.rectangle(img, ptLeftTop, ptRightBottom, blue, thickness, lineType)
 cv.namedWindow("chess", cv.WINDOW_NORMAL)
 cv.imshow('chess', img)

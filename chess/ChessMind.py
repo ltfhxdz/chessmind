@@ -31,7 +31,7 @@ chess.drawChess(img, sortChessesList)
 # # pt2 矩形对角线上的另一个顶点  X+宽 Y+高
 # pt2 = (23 + 109, 858 + 100)
 # # -1 表示填充，1 表示画框, >=2表示线的粗细
-# cv.rectangle(img, pt1, pt2, (255, 0, 0), 2, 4)
+# cv.rectangle(img, pt1, pt2, color, 2, 4)
 
 
 # # 画格子

@@ -9,21 +9,21 @@ from PIL import Image, ImageDraw, ImageFont
 class chess:
 
     @staticmethod
-    def chonghe(box1, box2):
-        """box2落在了box1里"""
+    def chonghe(box1, bofinal):
+        """bofinal落在了box1里"""
         x01 = box1['x']
         y01 = box1['y']
         box1w = box1['width']
         box1h = box1['height']
-        x11 = box2['x']
-        y11 = box2['y']
-        box2w = box2['width']
-        box2h = box2['height']
+        x11 = bofinal['x']
+        y11 = bofinal['y']
+        bofinalw = bofinal['width']
+        bofinalh = bofinal['height']
 
         x02 = x01 + box1w
         y02 = y01 + box1h
-        x12 = x11 + box2w
-        y12 = y11 + box2h
+        x12 = x11 + bofinalw
+        y12 = y11 + bofinalh
 
         if (x01 <= x11) and (y01 <= y12) and (x02 >= x12) and (y02 >= y12):
             return True

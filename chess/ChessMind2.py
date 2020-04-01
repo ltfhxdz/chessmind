@@ -6,7 +6,7 @@ import cv2 as cv
 from PIL import Image, ImageDraw, ImageFont
 from util.ChessTool2 import chess2 as chess
 
-fileName = 'chess1'
+fileName = 'chess4'
 toFile = 'D:/xyz/workspace/chessmind/chess/data/images/baidu/' + fileName + 'b.jpg'
 # 得到排序的列表
 sortChessesList = chess.getSortChessList(fileName)
@@ -19,6 +19,9 @@ chess.max_min(sortChessesList)
 # 初始化画布
 img = chess.drawEmptyRect(sortChessesList)
 
+# 棋盘的起始点和最后一块
+chess.beginPoint(sortChessesList)
+print(sortChessesList)
 # 画棋盘
 img = chess.drawChessboard(img, sortChessesList)
 
@@ -26,7 +29,7 @@ img = chess.drawChessboard(img, sortChessesList)
 img = chess.drawChess(img, sortChessesList)
 
 cv.imwrite(toFile, img)
-cv.namedWindow("chess", cv.WINDOW_NORMAL)
+cv.namedWindow('chess', cv.WINDOW_NORMAL)
 cv.imshow('chess', img)
 cv.waitKey()  # 显示 10000 ms 即 10s 后消失
 cv.destroyAllWindows()

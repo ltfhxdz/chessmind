@@ -1,0 +1,75 @@
+{
+  "log_id": 1094380595521093840,
+  "results": [
+    {
+      "location": {
+        "height": 22,
+        "left": 264,
+        "top": 12,
+        "width": 23
+      },
+      "name": "kong",
+      "score": 0.9999997615814209
+    },
+    {
+      "location": {
+        "height": 21,
+        "left": 222,
+        "top": 166,
+        "width": 21
+      },
+      "name": "kong",
+      "score": 0.999992847442627
+    },
+    {
+      "location": {
+        "height": 21,
+        "left": 200,
+        "top": 167,
+        "width": 20
+      },
+      "name": "kong",
+      "score": 0.9995442032814026
+    },
+    {
+      "location": {
+        "height": 22,
+        "left": 177,
+        "top": 167,
+        "width": 22
+      },
+      "name": "kong",
+      "score": 0.9978851675987244
+    },
+    {
+      "location": {
+        "height": 21,
+        "left": 257,
+        "top": 156,
+        "width": 20
+      },
+      "name": "hongpao",
+      "score": 0.9940819144248962
+    },
+    {
+      "location": {
+        "height": 21,
+        "left": 156,
+        "top": 35,
+        "width": 21
+      },
+      "name": "kong",
+      "score": 0.9520919322967529
+    },
+    {
+      "location": {
+        "height": 19,
+        "left": 190,
+        "top": 202,
+        "width": 20
+      },
+      "name": "hongpao",
+      "score": 0.9157993793487549
+    }
+  ]
+}
