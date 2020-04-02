@@ -6,7 +6,7 @@ import cv2 as cv
 from PIL import Image, ImageDraw, ImageFont
 from util.ChessTool2 import chess2 as chess
 
-fileName = 'chess2'
+fileName = 'chess65'
 toFile = 'D:/xyz/workspace/chessmind/chess/data/images/baidu/' + fileName + 'b.jpg'
 # 得到排序的列表
 sortChessesList = chess.getSortChessList(fileName)
