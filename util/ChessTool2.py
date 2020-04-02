@@ -174,6 +174,7 @@ class chess2:
         beginPoint = min(sortChessesList, key=lambda w: (w['begin']))
         beginPoint['location'] = 'start'
         print('beginPoint=' + str(beginPoint))
+
         beginx = beginPoint['x']
         beginy = beginPoint['y']
         beginw = beginPoint['width']
@@ -181,9 +182,7 @@ class chess2:
 
         name = beginPoint['name']
         if 'kong' not in name:
-            print('不是空块')
             point = beginPoint.get('point')
-            print(point)
             if point == 1:
                 # 1中心点：x+width/2,y+height/2
                 # 1起始点：1的中心点
@@ -212,9 +211,40 @@ class chess2:
         endPoint = min(sortChessesList, key=lambda w: (w['end']))
         endPoint['location'] = 'finish'
         print('endPoint=' + str(endPoint))
+        endPointX = endPoint['x']
+        endPointY = endPoint['y']
+        endPointW = endPoint['width']
+        endPointH = endPoint['height']
 
-        endx = endPoint['x'] + endPoint['width']
-        endy = endPoint['y'] + endPoint['height']
+        endx = endPointX + endPointW
+        endy = endPointY + endPointH
+
+        name = endPoint['name']
+        if 'kong' not in name:
+            point = endPoint.get('point')
+            if point == 5:
+                # 5中心点：x+width/2,y+height/2
+                # 5终点：5的中心点
+                endx = endPointX + round(endPointW / 2)
+                endy = endPointY + round(endPointH / 2)
+            elif point == 6:
+                print(point)
+                # 6中心点：x+width/2,y+height/2
+                # 6终点：6的中心点x,y+height
+                endx = endPointX + round(endPointW / 2)
+                endy = endPointY + round(endPointH / 2) + endPointH
+            elif point == 7:
+                print(point)
+                # 7中心点：x+width/2,y+height/2
+                # 7终点：7的中心点x+width,y
+                endx = endPointX + round(endPointW / 2) + endPointW
+                endy = endPointY + round(endPointH / 2)
+            elif point == 8:
+                print(point)
+                # 8中心点：x+width/2,y+height/2
+                # 8终点：8的中心点x+width,y+height
+                endx = endPointX + round(endPointW / 2) + endPointW
+                endy = endPointY + round(endPointH / 2) + endPointH
 
         width = round((endx - beginx) / 8)
         height = round((endy - beginy) / 9)
@@ -265,7 +295,7 @@ class chess2:
 
     @staticmethod
     def beginPoint(sortChessesList):
-        qipan = max(sortChessesList, key=lambda w: (w['width']))
+        qipan = max(sortChessesList, key=lambda ww: (ww['width']))
         qipanX = qipan['x']
         qipanY = qipan['y']
         qipanW = qipan['width']
@@ -277,6 +307,7 @@ class chess2:
             one = n
             # print(one)
             name = one['name']
+
             if 'qipan' in name:
                 n['begin'] = 10000
                 n['end'] = 10000
@@ -307,9 +338,26 @@ class chess2:
 
             end = round(math.sqrt(math.pow(abs(endX - ex), 2) + math.pow(abs(endY - ey), 2)))
             n['end'] = end
+            # 在分析是否5点、6点、7点、8点
+            # 5点  qx-5x<width 	qy-5y<height
+            if (abs(endX - x) < w) and (abs(endY - y) < h):
+                n['point'] = 5
+                print(n)
+            # 6点 6点  qx-6x<width  	qy-6y<height*2
+            if (abs(endX - x) < w) and (abs(endY - y) < h * 2) and (abs(endY - y) > h):
+                n['point'] = 6
+                print(n)
+            # 7点  qx-7x<width*2  	qy-7y<height
+            if (abs(endX - x) < w * 2) and (abs(endX - x) > w) and (abs(endY - y) < h):
+                n['point'] = 7
+                print(n)
+            # 8点  qx-8x<width*2	qy-8y<height*2
+            if (abs(endX - x) < w * 2) and (abs(endY - y) < h * 2) and (abs(endX - x) >= w) and (abs(endY - y) > h):
+                n['point'] = 8
+                print(n)
 
         # 继续寻找是否比起始点更前的棋子：X<Bx,Y<=By+Bw/2
-        beginPoint = min(sortChessesList, key=lambda m: (m['begin']))
+        beginPoint = min(sortChessesList, key=lambda a: (a['begin']))
         beginX = beginPoint['x']
         beginY = beginPoint['y']
         beginW = beginPoint['width']
