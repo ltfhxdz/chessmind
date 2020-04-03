@@ -33,14 +33,14 @@ print(json.dumps(sortChessesList))
 img = chess.drawChessboard(img, sortChessesList)
 
 # 画棋子
-img = chess.drawChess(img, sortChessesList)
+# img = chess.drawChess(img, sortChessesList)
 
 # 画逻辑点
-# logicPointList = chess.drawLogicPoint(sortChessesList, img)
+logicPointList = chess.drawLogicPoint(sortChessesList, img)
 # print(logicPointList)
 
-# # # 显示棋子
-# img = chess.showChess(img, logicPointList, sortChessesList)
+# 显示棋子
+img = chess.showChess(img, logicPointList, sortChessesList)
 
 end = time.time()
 print('Running time: %1.2f Seconds' % (end - start))

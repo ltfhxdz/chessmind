@@ -87,12 +87,11 @@ class chess2:
     def drawChess(img, sortChessesList):
         # 画棋子
         averageDict = chess2.widthAndHeightAverage(sortChessesList)
+        # 棋子的宽和高使用平均值，目的是为了棋子的一致性
         widthAverage = averageDict['widthAverage']
         heightAverage = averageDict['heightAverage']
 
-        m = 0
         for n in sortChessesList:
-            m = m + 1
             one = n
             # print(one)
             name = one['name']
@@ -105,14 +104,16 @@ class chess2:
             width = widthAverage
             height = heightAverage
 
-            location = one.get('location')
+            place = one.get('place')
+            print(place)
 
             single = ''
             if name != 'kong':
                 single = chessMapping[name]
 
             if 'hong' in name:
-                if location is None:
+                # 起始点或终点就画蓝色
+                if place is None:
                     color = (0, 0, 255)
                 else:
                     color = (255, 0, 0)
@@ -123,7 +124,8 @@ class chess2:
                 # 不能复用颜色 opencv和PIL颜色规则不一样
                 img = chess2.write(img, x, y, single, (255, 255, 255))
             elif 'hei' in name:
-                if location is None:
+                # 起始点或终点就画蓝色
+                if place is None:
                     color = (0, 0, 0)
                 else:
                     color = (255, 0, 0)
@@ -132,7 +134,8 @@ class chess2:
                 cv.rectangle(img, pt1, pt2, color, -1, 4)
                 img = chess2.write(img, x, y, single, (255, 255, 255))
             elif 'kong' in name:
-                if location is None:
+                # 起始点或终点就画蓝色
+                if place is None:
                     color = (0, 255, 0)
                 else:
                     color = (255, 0, 0)
@@ -169,17 +172,38 @@ class chess2:
     def drawChessboard(img, sortChessesList):
         # 画棋盘
         chess2.drawQipan(img, sortChessesList)
+        # 位置信息
+        beginx, beginy, endx, endy, width, height = chess2.placeInfo(sortChessesList)
 
+        # pt1 矩形的一个顶点
+        pt1 = (beginx, beginy)
+        # pt2 矩形对角线上的另一个顶点  X+宽 Y+高
+        pt2 = (endx, endy)
+        # -1 表示填充，>=1 表示画框线的粗细
+        thickness = 2
+        color = (0, 0, 0)
+        cv.rectangle(img, pt1, pt2, color, thickness, 4)
+
+        # 画横线    X是横坐标 Y是纵坐标
+        for a in range(1, 9):
+            cv.line(img, (beginx, beginy + height * a), (endx, beginy + height * a), color, thickness)
+
+        # 画竖线    X是横坐标 Y是纵坐标
+        for a in range(1, 8):
+            cv.line(img, (beginx + width * a, beginy), (beginx + width * a, endy), color, thickness)
+
+        return img
+
+    @staticmethod
+    def placeInfo(sortChessesList):
         # 起始点
         beginPoint = min(sortChessesList, key=lambda w: (w['begin']))
-        beginPoint['location'] = 'start'
+        beginPoint['place'] = 'start'
         print('beginPoint=' + str(beginPoint))
-
         beginx = beginPoint['x']
         beginy = beginPoint['y']
         beginw = beginPoint['width']
         beginh = beginPoint['height']
-
         name = beginPoint['name']
         if 'kong' not in name:
             point = beginPoint.get('point')
@@ -206,19 +230,16 @@ class chess2:
                 # 4起始点：4的中心点x-width,y-height
                 beginx = (beginx + round(beginw / 2)) - beginw
                 beginy = (beginy + round(beginh / 2)) - beginh
-
         # 终点
         endPoint = min(sortChessesList, key=lambda w: (w['end']))
-        endPoint['location'] = 'finish'
+        endPoint['place'] = 'finish'
         print('endPoint=' + str(endPoint))
         endPointX = endPoint['x']
         endPointY = endPoint['y']
         endPointW = endPoint['width']
         endPointH = endPoint['height']
-
         endx = endPointX + endPointW
         endy = endPointY + endPointH
-
         name = endPoint['name']
         if 'kong' not in name:
             point = endPoint.get('point')
@@ -245,39 +266,9 @@ class chess2:
                 # 8终点：8的中心点x+width,y+height
                 endx = endPointX + round(endPointW / 2) + endPointW
                 endy = endPointY + round(endPointH / 2) + endPointH
-
         width = round((endx - beginx) / 8)
         height = round((endy - beginy) / 9)
-
-        # pt1 矩形的一个顶点
-        pt1 = (beginx, beginy)
-        # pt2 矩形对角线上的另一个顶点  X+宽 Y+高
-        pt2 = (endx, endy)
-        # -1 表示填充，>=1 表示画框线的粗细
-        thickness = 2
-        color = (0, 0, 0)
-        cv.rectangle(img, pt1, pt2, color, thickness, 4)
-
-        # 画横线    X是横坐标 Y是纵坐标
-        cv.line(img, (beginx, beginy + height * 1), (endx, beginy + height * 1), color, thickness)
-        cv.line(img, (beginx, beginy + height * 2), (endx, beginy + height * 2), color, thickness)
-        cv.line(img, (beginx, beginy + height * 3), (endx, beginy + height * 3), color, thickness)
-        cv.line(img, (beginx, beginy + height * 4), (endx, beginy + height * 4), color, thickness)
-        cv.line(img, (beginx, beginy + height * 5), (endx, beginy + height * 5), color, thickness)
-        cv.line(img, (beginx, beginy + height * 6), (endx, beginy + height * 6), color, thickness)
-        cv.line(img, (beginx, beginy + height * 7), (endx, beginy + height * 7), color, thickness)
-        cv.line(img, (beginx, beginy + height * 8), (endx, beginy + height * 8), color, thickness)
-
-        # 画竖线    X是横坐标 Y是纵坐标
-        cv.line(img, (beginx + width * 1, beginy), (beginx + width * 1, endy), color, thickness)
-        cv.line(img, (beginx + width * 2, beginy), (beginx + width * 2, endy), color, thickness)
-        cv.line(img, (beginx + width * 3, beginy), (beginx + width * 3, endy), color, thickness)
-        cv.line(img, (beginx + width * 4, beginy), (beginx + width * 4, endy), color, thickness)
-        cv.line(img, (beginx + width * 5, beginy), (beginx + width * 5, endy), color, thickness)
-        cv.line(img, (beginx + width * 6, beginy), (beginx + width * 6, endy), color, thickness)
-        cv.line(img, (beginx + width * 7, beginy), (beginx + width * 7, endy), color, thickness)
-
-        return img
+        return beginx, beginy, endx, endy, width, height
 
     @staticmethod
     def drawQipan(img, sortChessesList):
@@ -376,6 +367,32 @@ class chess2:
     @staticmethod
     def drawLogicPoint(sortChessesList, img):
         """画逻辑点"""
+        # 位置信息
+        beginx, beginy, endx, endy, width, height = chess2.placeInfo(sortChessesList)
+
+        A = int(beginx - width / 4)
+        B = int(beginy - height / 4)
+        W = int(width / 2)
+        H = int(height / 2)
+
+        logicPointList = []
+        for a in range(0, 10):
+            B1 = B + height * a
+            for b in range(0, 9):
+                A1 = A + width * b
+                pt1 = (A1, B1)
+                pt2 = (A1 + W, B1 + H)
+                logicPointName = 'D' + str(a + 1) + str(b + 1)
+                logicPointDict = {}
+                logicPointDict.update({'name': logicPointName, 'x': A1, 'y': B1, 'width': W, 'height': H})
+                logicPointList.append(logicPointDict)
+                fillColor = (0, 255, 0)
+                # cv.rectangle(img, pt1, pt2, fillColor, -1, 4)
+        return logicPointList
+
+    @staticmethod
+    def drawLogicPoint2(sortChessesList, img):
+        """画逻辑点"""
         minX = min(sortChessesList, key=lambda w: (w['x']))
 
         D11x = minX['x']
@@ -411,18 +428,15 @@ class chess2:
 
             for n in sortChessesList:
                 one = n
-                # print(one)
                 name = one['name']
-                score = one['score']
-                left = one['x']
-                top = one['y']
+                x = one['x']
+                y = one['y']
                 width = one['width']
                 height = one['height']
                 sortChessBox = {}
-                sortChessBox.update({'x': left, 'y': top, 'width': width, 'height': height})
+                sortChessBox.update({'x': x, 'y': y, 'width': width, 'height': height})
 
                 if 'qipan' == name:
-                    print('qipan ='+name)
                     continue
 
                 if chess2.chonghe(sortChessBox, logicPointBox):
@@ -431,11 +445,18 @@ class chess2:
                         single = chessMapping[name]
 
                     if 'hong' in name:
-                        img = chess2.drawRedChess(img, single, left, top)
+                        color = (0, 0, 255)
+                        pt1 = (x, y)
+                        pt2 = (x + width, y + height)
+                        cv.rectangle(img, pt1, pt2, color, -1, 4)
+                        # 不能复用颜色 opencv和PIL颜色规则不一样
+                        img = chess2.write(img, x, y, single, (255, 255, 255))
                     elif 'hei' in name:
-                        img = chess2.drawBlackChess(img, single, left, top)
-                    elif 'kong' in name:
-                        img = chess2.drawKongChess(img, single, left, top)
+                        color = (0, 0, 0)
+                        pt1 = (x, y)  # left,top
+                        pt2 = (x + width, y + height)
+                        cv.rectangle(img, pt1, pt2, color, -1, 4)
+                        img = chess2.write(img, x, y, single, (255, 255, 255))
                     else:
                         print('name=' + name)
                     break
