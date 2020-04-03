@@ -10,8 +10,8 @@ from PIL import Image, ImageDraw, ImageFont
 class chess2:
 
     @staticmethod
-    def getChessList(imageName):
-        f = open('D:/xyz/workspace/chessmind/chess/data/json/' + imageName + '.json', encoding='utf-8')
+    def getChessList(filePath):
+        f = open(filePath, encoding='utf-8')
         info = f.read()
         f.close()
         chessDict = json.loads(info)
@@ -25,8 +25,8 @@ class chess2:
         qipanH = qipan['height']
         # 生成一个空灰度图像
         # TODO 分辨率还存在调整 300 600
-        imageW = qipanW + 600
-        imageH = qipanH + 600
+        imageW = qipanW + 300
+        imageH = qipanH + 300
         img = np.zeros((imageW, imageH, 3), np.uint8)
         # 白色背景
         img[:, :, 0] = np.zeros([imageW, imageH]) + 255
@@ -138,9 +138,9 @@ class chess2:
                     color = (255, 0, 0)
                 pt1 = (x, y)  # left,top
                 pt2 = (x + width, y + height)
-                cv.rectangle(img, pt1, pt2, color, -1, 4)
-                # img = chess2.write(img, x, y, str(m), (0, 0, 0))
-                img = chess2.write(img, x, y, '', (0, 0, 0))
+                # cv.rectangle(img, pt1, pt2, color, -1, 4)
+                # # img = chess2.write(img, x, y, str(m), (0, 0, 0))
+                # img = chess2.write(img, x, y, '', (0, 0, 0))
             else:
                 print('name=' + name)
         return img
@@ -372,6 +372,125 @@ class chess2:
 
             if x < beginX and y <= (beginY + round(beginW / 2)):
                 one['begin'] = 0
+
+    @staticmethod
+    def drawLogicPoint(sortChessesList, img):
+        """画逻辑点"""
+        minX = min(sortChessesList, key=lambda w: (w['x']))
+
+        D11x = minX['x']
+        D11y = minX['y']
+        width = minX['width']
+        height = minX['height']
+        A = int(D11x - width / 4)
+        B = int(D11y - height / 4)
+        W = int(width / 2)
+        H = int(height / 2)
+
+        logicPointList = []
+        for a in range(0, 10):
+            B1 = B + height * a
+            for b in range(0, 9):
+                A1 = A + width * b
+                pt1 = (A1, B1)
+                pt2 = (A1 + W, B1 + H)
+                logicPointName = 'D' + str(a + 1) + str(b + 1)
+                logicPointDict = {}
+                logicPointDict.update({'name': logicPointName, 'x': A1, 'y': B1, 'width': W, 'height': H})
+                logicPointList.append(logicPointDict)
+                fillColor = (0, 255, 0)
+                cv.rectangle(img, pt1, pt2, fillColor, -1, 4)
+        return logicPointList
+
+    @staticmethod
+    def showChess(img, logicPointList, sortChessesList):
+        # 如果逻辑点被包围，就显示棋子
+        for i in logicPointList:
+            logicPointBox = {}
+            logicPointBox.update({'x': i['x'], 'y': i['y'], 'width': i['width'], 'height': i['height']})
+
+            for n in sortChessesList:
+                one = n
+                # print(one)
+                name = one['name']
+                score = one['score']
+                left = one['x']
+                top = one['y']
+                width = one['width']
+                height = one['height']
+                sortChessBox = {}
+                sortChessBox.update({'x': left, 'y': top, 'width': width, 'height': height})
+
+                if 'qipan' == name:
+                    print('qipan ='+name)
+                    continue
+
+                if chess2.chonghe(sortChessBox, logicPointBox):
+                    single = ''
+                    if name != 'kong':
+                        single = chessMapping[name]
+
+                    if 'hong' in name:
+                        img = chess2.drawRedChess(img, single, left, top)
+                    elif 'hei' in name:
+                        img = chess2.drawBlackChess(img, single, left, top)
+                    elif 'kong' in name:
+                        img = chess2.drawKongChess(img, single, left, top)
+                    else:
+                        print('name=' + name)
+                    break
+        return img
+
+    @staticmethod
+    def chonghe(box1, bofinal):
+        """bofinal落在了box1里"""
+        x01 = box1['x']
+        y01 = box1['y']
+        box1w = box1['width']
+        box1h = box1['height']
+        x11 = bofinal['x']
+        y11 = bofinal['y']
+        bofinalw = bofinal['width']
+        bofinalh = bofinal['height']
+
+        x02 = x01 + box1w
+        y02 = y01 + box1h
+        x12 = x11 + bofinalw
+        y12 = y11 + bofinalh
+
+        if (x01 <= x11) and (y01 <= y12) and (x02 >= x12) and (y02 >= y12):
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def drawBlackChess(img, word, left, top):
+        fillColor = (0, 0, 0)
+        chess2.drawRect(img, left, top, fillColor)
+        img = chess2.write(img, left, top, word, fillColor)
+        return img
+
+    @staticmethod
+    def drawRedChess(img, word, left, top):
+        chess2.drawRect(img, left, top, (0, 0, 255))
+        img = chess2.write(img, left, top, word, (255, 0, 0))
+        return img
+
+    @staticmethod
+    def drawKongChess(img, word, left, top):
+        chess2.drawFillRect(img, left, top, (0, 255, 0))
+        img = chess2.write(img, left, top, word, (0, 255, 0))
+        return img
+
+    @staticmethod
+    def drawRect(img, left, top, fillColor):
+        """画方框"""
+        pt1 = (left, top)  # left,top
+        pt2 = (left + 25, top + 25)  # left+width,top+height
+        thickness = 1
+        lineType = 4
+        cv.rectangle(img, pt1, pt2, fillColor, thickness, lineType)
+        return
 
 
 chessMapping = {'hongshuai': '帅', 'hongshi': '士', 'hongxiang': '相', 'hongma': '马', 'hongche': '车',
