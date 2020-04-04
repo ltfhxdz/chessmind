@@ -21,7 +21,7 @@ class chessnet:
         session = requests.Session()
         response = session.get(host)
         access_token = response.json().get("access_token")
-        print(access_token)
+        # print(access_token)
         return access_token
 
     @staticmethod
@@ -42,17 +42,17 @@ class chessnet:
             json.dump(resultDict, file_obj)
 
 
-print(datetime.now())
-print(sys.version)
-
-domain = "aip.baidubce.com"
-myaddr = socket.getaddrinfo(domain, 'https')
-print(str(domain) + " = " + myaddr[0][4][0])
-
-start = time.time()
-
-# chessnet.uploadImage()
-
-
-end = time.time()
-print('Running time: %1.2f Seconds' % (end - start))
+# print(datetime.now())
+# print(sys.version)
+#
+# domain = "aip.baidubce.com"
+# myaddr = socket.getaddrinfo(domain, 'https')
+# print(str(domain) + " = " + myaddr[0][4][0])
+#
+# start = time.time()
+#
+# # chessnet.uploadImage()
+#
+#
+# end = time.time()
+# print('Running time: %1.2f Seconds' % (end - start))

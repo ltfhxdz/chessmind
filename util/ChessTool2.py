@@ -25,8 +25,8 @@ class chess2:
         qipanH = qipan['height']
         # 生成一个空灰度图像
         # TODO 分辨率还存在调整 300 600
-        imageW = qipanW + 300
-        imageH = qipanH + 300
+        imageW = qipanW + 600
+        imageH = qipanH + 600
         img = np.zeros((imageW, imageH, 3), np.uint8)
         # 白色背景
         img[:, :, 0] = np.zeros([imageW, imageH]) + 255
@@ -105,7 +105,6 @@ class chess2:
             height = heightAverage
 
             place = one.get('place')
-            print(place)
 
             single = ''
             if name != 'kong':
@@ -382,7 +381,7 @@ class chess2:
                 A1 = A + width * b
                 pt1 = (A1, B1)
                 pt2 = (A1 + W, B1 + H)
-                logicPointName = 'D' + str(a + 1) + str(b + 1)
+                logicPointName = str(a + 1) + str(b + 1)
                 logicPointDict = {}
                 logicPointDict.update({'name': logicPointName, 'x': A1, 'y': B1, 'width': W, 'height': H})
                 logicPointList.append(logicPointDict)
@@ -422,6 +421,7 @@ class chess2:
     @staticmethod
     def showChess(img, logicPointList, sortChessesList):
         # 如果逻辑点被包围，就显示棋子
+        place = ''
         for i in logicPointList:
             logicPointBox = {}
             logicPointBox.update({'x': i['x'], 'y': i['y'], 'width': i['width'], 'height': i['height']})
@@ -440,9 +440,15 @@ class chess2:
                     continue
 
                 if chess2.chonghe(sortChessBox, logicPointBox):
-                    single = ''
-                    if name != 'kong':
-                        single = chessMapping[name]
+                    # print('logic point name=%s, chess name=%s' % (i['name'], name))
+                    if name == 'kong':
+                        continue
+
+                    single = chessMapping[name]
+                    if 'hong' in name:
+                        place = place + '红' + single + i['name'] + '，'
+                    elif 'hei' in name:
+                        place = place + '黑' + single + i['name'] + '，'
 
                     if 'hong' in name:
                         color = (0, 0, 255)
@@ -460,7 +466,8 @@ class chess2:
                     else:
                         print('name=' + name)
                     break
-        return img
+        place = place[0: len(place) - 1]
+        return img, place
 
     @staticmethod
     def chonghe(box1, bofinal):
@@ -512,6 +519,25 @@ class chess2:
         lineType = 4
         cv.rectangle(img, pt1, pt2, fillColor, thickness, lineType)
         return
+
+    @staticmethod
+    def isExist(place):
+        # 比较棋谱
+        filePath = 'D:/xyz/workspace/chessmind/chess/manual.json'
+        f = open(filePath, encoding='utf-8')
+        info = f.read()
+        f.close()
+        chessList = json.loads(info)
+        flag = False
+        for x in chessList:
+            location = x['location']
+            if place == location:
+                flag = True
+                print(x)
+        if flag:
+            print('找到')
+        else:
+            print('没有找到')
 
 
 chessMapping = {'hongshuai': '帅', 'hongshi': '士', 'hongxiang': '相', 'hongma': '马', 'hongche': '车',

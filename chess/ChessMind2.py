@@ -8,7 +8,7 @@ from util.ChessNetwork import chessnet
 
 start = time.time()
 
-fileName = 'chess2'
+fileName = 'chess15'
 imagePath = 'D:/xyz/workspace/chessdata/images/' + fileName + '.jpg'
 jsonPath = 'D:/xyz/workspace/chessdata/json/' + fileName + '.json'
 chessPath = 'D:/xyz/workspace/chessdata/images/baidu/' + fileName + 'b.jpg'
@@ -18,7 +18,6 @@ chessnet.uploadImage(imagePath, jsonPath)
 # 得到排序的列表
 sortChessesList = chess.getSortChessList(jsonPath)
 print(json.dumps(sortChessesList))
-print(len(sortChessesList))
 
 # 显示最大值、最小值
 chess.max_min(sortChessesList)
@@ -40,7 +39,11 @@ logicPointList = chess.drawLogicPoint(sortChessesList, img)
 # print(logicPointList)
 
 # 显示棋子
-img = chess.showChess(img, logicPointList, sortChessesList)
+img, place = chess.showChess(img, logicPointList, sortChessesList)
+print(place)
+
+# 是否存在
+chess.isExist(place)
 
 end = time.time()
 print('Running time: %1.2f Seconds' % (end - start))
