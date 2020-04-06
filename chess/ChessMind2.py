@@ -8,12 +8,12 @@ from util.ChessNetwork import chessnet
 
 start = time.time()
 
-fileName = 'chess15'
-imagePath = 'D:/xyz/workspace/chessdata/images/' + fileName + '.jpg'
+fileName = 'chess100'
+
 jsonPath = 'D:/xyz/workspace/chessdata/json/' + fileName + '.json'
 chessPath = 'D:/xyz/workspace/chessdata/images/baidu/' + fileName + 'b.jpg'
 # 上传文件
-chessnet.uploadImage(imagePath, jsonPath)
+chessnet.uploadImage(fileName, jsonPath)
 
 # 得到排序的列表
 sortChessesList = chess.getSortChessList(jsonPath)
@@ -40,6 +40,7 @@ logicPointList = chess.drawLogicPoint(sortChessesList, img)
 
 # 显示棋子
 img, place = chess.showChess(img, logicPointList, sortChessesList)
+print(fileName)
 print(place)
 
 # 是否存在

@@ -7,6 +7,7 @@ import json
 import base64
 import requests
 from datetime import datetime
+import os
 
 
 class chessnet:
@@ -25,7 +26,13 @@ class chessnet:
         return access_token
 
     @staticmethod
-    def uploadImage(imagePath, jsonPath):
+    def uploadImage(fileName, jsonPath):
+        suffix = ['.jpg', '.png', '.jpeg']
+        for x in suffix:
+            imagePath = 'D:/xyz/workspace/chessdata/images/' + fileName + x
+            if os.path.exists(imagePath):
+                break
+
         request_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/detection/chessx"
         with open(imagePath, 'rb') as f:
             image = base64.b64encode(f.read()).decode('UTF8')
@@ -40,7 +47,6 @@ class chessnet:
         print(resultDict['results'])
         with open(jsonPath, 'w') as file_obj:
             json.dump(resultDict, file_obj)
-
 
 # print(datetime.now())
 # print(sys.version)

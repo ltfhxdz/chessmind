@@ -1,0 +1,101 @@
+chess1  正确
+chess2  正确
+chess3  正确
+chess5  正确 同chess2
+chess7  正确
+chess8  正确
+chess12 正确
+chess14 正确
+chess15 正确
+chess16 正确
+chess17 正确
+chess18 正确
+chess19 正确
+chess21 正确
+chess22 正确
+chess23 正确  同chess8
+chess24 正确
+chess27 正确
+chess29 正确
+chess30 正确
+chess33 正确
+chess34 正确
+chess35 正确
+chess36 正确
+chess37 正确
+chess38 正确
+chess39 正确  同chess20
+chess41 正确
+chess42 正确
+chess43 正确
+chess44 正确
+chess66 正确  同chess21
+chess67 正确
+chess68 正确
+chess70 正确
+chess75 正确
+chess78 正确 同chess27
+chess88 正确
+chess89 正确
+chess93 正确
+chess94 正确
+chess99 正确
+
+chess4  不正确
+chess6  不正确
+chess9  不正确 红帅返回的是红相
+chess10 不正确 少了红士86
+chess11 返回的棋子正确，棋盘没有画对
+chess13 返回的棋子正确，棋盘没有画对
+chess20 不正确 黑象返回了红兵
+chess25 不正确 红马返回了红兵
+chess26 返回的棋子正确，棋盘没有画对
+chess28 返回的棋子正确，棋盘没有画对
+chess31 不正确
+chess32 返回的棋子正确，棋盘没有画对
+chess40 不正确
+chess45 返回的棋子正确，棋盘没有画对
+chess46 不正确
+chess47 返回的棋子正确，棋盘没有画对
+chess48 返回的棋子正确，棋盘没有画对
+chess49 不正确 黑将返回了黑象，黑象返回了红车
+chess50 返回的棋子正确，棋盘没有画对
+chess51 不正确
+chess52 不正确
+chess53 不正确
+chess54 不正确
+chess55 不正确
+chess56 不正确
+chess57 不正确
+chess58 不正确
+chess59 不正确
+chess60 不正确
+chess61 不正确
+chess62 不正确
+chess63 不正确
+chess64 不正确
+chess65 不正确
+chess69 不正确
+chess71 不正确
+chess72 不正确
+chess73 不正确 红车返回了红兵
+chess74 不正确
+chess76 不正确
+chess77 不正确
+chess79 不正确
+chess80 不正确
+chess81 不正确
+chess82 不正确
+chess83 不正确
+chess84 不正确
+chess85 不正确
+chess86 不正确
+chess87 不正确
+chess90 不正确
+chess91 不正确
+chess92 不正确
+chess95 不正确
+chess96 不正确
+chess97 不正确
+chess98 不正确
+chess100 不正确
