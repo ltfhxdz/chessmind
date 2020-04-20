@@ -8,7 +8,7 @@ from util.ChessNetwork import chessnet
 
 start = time.time()
 
-fileName = 'chess100'
+fileName = 'chess1'
 
 jsonPath = 'D:/xyz/workspace/chessdata/json/' + fileName + '.json'
 chessPath = 'D:/xyz/workspace/chessdata/images/baidu/' + fileName + 'b.jpg'
